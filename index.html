@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quotient | Professional Quote Generator for Tradesmen</title>
+  <meta name="description" content="Quotient — free professional quote generator for tradesmen. Create, format and print quotes in under 2 minutes. No account needed." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* All your existing CSS exactly as before */
+    :root {
+      --navy: #080d1a;
+      --navy-mid: #0d1425;
+      --navy-light: #131d35;
+      --navy-border: rgba(255,255,255,0.07);
+      --blue: #3b82f6;
+      --blue-light: #60a5fa;
+      --blue-glow: rgba(59,130,246,0.12);
+      --green: #22c55e;
+      --white: #ffffff;
+      --white-soft: rgba(255,255,255,0.7);
+      --white-muted: rgba(255,255,255,0.35);
+      --red: #ef4444;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--navy); color: var(--white); font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.6; overflow-x: hidden; }
+    ::selection { background: var(--blue); color: white; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--navy); }
+    ::-webkit-scrollbar-thumb { background: rgba(59,130,246,0.3); border-radius: 10px; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; left: 0; width: 100%; z-index: 1000;
+      padding: 1rem 5%;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      background: rgba(8,13,26,0.96);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--navy-border);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
+    .nav-logo-mark {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem; font-weight: 500; color: white;
+    }
+    .nav-logo-text { font-size: 1.1rem; font-weight: 700; color: var(--white); letter-spacing: -0.02em; }
+    .nav-logo-text span { color: var(--blue); }
+    .nav-badge { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); padding: 0.25rem 0.6rem; border-radius: 50px; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-link { color: var(--white-soft); text-decoration: none; font-size: 0.85rem; transition: color 0.2s ease; }
+    .nav-link:hover { color: var(--white); }
+    .nav-pro { padding: 0.5rem 1.2rem; background: var(--blue); color: white; text-decoration: none; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; border-radius: 6px; transition: filter 0.2s ease; }
+    .nav-pro:hover { filter: brightness(1.1); }
+
+    /* HERO */
+    .hero {
+      padding: 5rem 5% 3rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--blue-light);
+      background: var(--blue-glow);
+      border: 1px solid rgba(59,130,246,0.2);
+      padding: 0.35rem 0.9rem; border-radius: 50px;
+      margin-bottom: 1.8rem;
+    }
+    .hero-tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); animation: blink 2s ease-in-out infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 700; line-height: 1.1;
+      letter-spacing: -0.03em; color: var(--white);
+      margin-bottom: 1.2rem;
+    }
+    .hero h1 span { color: var(--blue); }
+    .hero-sub { font-size: 1.05rem; color: var(--white-soft); max-width: 520px; margin: 0 auto 2.5rem; font-weight: 400; line-height: 1.65; }
+    .hero-stats { display: flex; align-items: center; justify-content: center; gap: 3rem; flex-wrap: wrap; margin-bottom: 3rem; }
+    .hero-stat { text-align: center; }
+    .hero-stat-num { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 500; color: var(--blue-light); }
+    .hero-stat-label { font-size: 0.75rem; color: var(--white-muted); margin-top: 0.2rem; }
+
+    /* MAIN APP */
+    .app-wrap {
+      max-width: 1100px; margin: 0 auto;
+      padding: 0 5% 6rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    /* FORM PANEL */
+    .form-panel {
+      background: var(--navy-mid);
+      border: 1px solid var(--navy-border);
+      border-radius: 12px;
+      overflow: hidden;
+      position: sticky;
+      top: 80px;
+      width: 100%;
+      min-width: 0;
+    }
+    .panel-header {
+      padding: 1.2rem 1.8rem;
+      border-bottom: 1px solid var(--navy-border);
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+    .panel-header-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--blue); }
+    .panel-header-title { font-size: 0.82rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--white-soft); }
+    .panel-body { padding: 1.8rem; overflow: hidden; box-sizing: border-box; width: 100%; }
+
+    .form-section { margin-bottom: 1.8rem; }
+    .form-section-title {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--blue-light); margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .form-section-title::after { content: ''; flex: 1; height: 1px; background: var(--navy-border); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .form-field { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 0.75rem; min-width: 0; }
+    .form-field label { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--white-muted); }
+    .form-field input, .form-field select, .form-field textarea {
+      background: var(--navy-light); border: 1px solid var(--navy-border);
+      border-radius: 6px; padding: 0.7rem 0.9rem;
+      color: var(--white); font-family: 'Inter', sans-serif;
+      font-size: 0.88rem; outline: none;
+      transition: border-color 0.2s ease;
+      -webkit-appearance: none;
+      width: 100%; min-width: 0; box-sizing: border-box;
+    }
+    .form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color: rgba(59,130,246,0.5); }
+    .form-field input::placeholder { color: var(--white-muted); }
+    .form-field select option { background: var(--navy-mid); }
+
+    /* LINE ITEMS */
+    .line-items { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 0.75rem; }
+    .line-item {
+      display: grid; grid-template-columns: 1fr 48px 72px 28px;
+      gap: 0.4rem; align-items: center; width: 100%;
+    }
+    .line-item input {
+      background: var(--navy-light); border: 1px solid var(--navy-border);
+      border-radius: 6px; padding: 0.6rem 0.5rem;
+      color: var(--white); font-family: 'Inter', sans-serif;
+      font-size: 0.82rem; outline: none;
+      transition: border-color 0.2s ease;
+      width: 100%; min-width: 0;
+    }
+    .line-item input:focus { border-color: rgba(59,130,246,0.5); }
+    .line-item input::placeholder { color: var(--white-muted); }
+    .line-item-qty { text-align: center; }
+    .line-item-price { text-align: right; }
+    .line-item-remove {
+      width: 28px; height: 28px; border-radius: 6px;
+      background: transparent; border: 1px solid var(--navy-border);
+      color: var(--white-muted); cursor: pointer; font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s ease, color 0.2s ease;
+      flex-shrink: 0;
+    }
+    .line-item-remove:hover { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: var(--red); }
+    .add-line-btn {
+      width: 100%; padding: 0.65rem;
+      background: transparent; border: 1px dashed var(--navy-border);
+      border-radius: 6px; color: var(--white-muted);
+      font-family: 'Inter', sans-serif; font-size: 0.82rem;
+      cursor: pointer; transition: border-color 0.2s ease, color 0.2s ease;
+    }
+    .add-line-btn:hover { border-color: rgba(59,130,246,0.4); color: var(--blue-light); }
+
+    /* TOGGLE */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; }
+    .toggle-label { font-size: 0.85rem; color: var(--white-soft); }
+    .toggle {
+      position: relative; width: 40px; height: 22px;
+      background: var(--navy-light); border: 1px solid var(--navy-border);
+      border-radius: 50px; cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .toggle.active { background: var(--blue); border-color: var(--blue); }
+    .toggle::after {
+      content: ''; position: absolute;
+      top: 2px; left: 2px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: white; transition: transform 0.2s ease;
+    }
+    .toggle.active::after { transform: translateX(18px); }
+
+    /* VAT RATE INPUT */
+    .vat-rate-input {
+      width: 58px;
+      background: var(--navy-light);
+      border: 1px solid var(--navy-border);
+      border-radius: 6px;
+      padding: 0.28rem 0.4rem;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.82rem;
+      outline: none;
+      text-align: center;
+      transition: border-color 0.2s ease;
+      -webkit-appearance: none;
+    }
+    .vat-rate-input:focus { border-color: rgba(59,130,246,0.5); }
+
+    /* GENERATE BTN */
+    .generate-btn {
+      width: 100%; padding: 1rem;
+      background: var(--blue); color: white; border: none;
+      border-radius: 8px; font-family: 'Inter', sans-serif;
+      font-size: 0.92rem; font-weight: 600; letter-spacing: 0.02em;
+      cursor: pointer; transition: filter 0.2s ease, transform 0.2s ease;
+      margin-top: 0.5rem;
+    }
+    .generate-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+    /* PREVIEW PANEL */
+    .preview-panel {
+      background: var(--navy-mid);
+      border: 1px solid var(--navy-border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .preview-header {
+      padding: 1.2rem 1.8rem;
+      border-bottom: 1px solid var(--navy-border);
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .preview-header-left { display: flex; align-items: center; gap: 0.75rem; }
+    .preview-header-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: blink 2s ease-in-out infinite; }
+    .preview-header-title { font-size: 0.82rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--white-soft); }
+    .preview-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .preview-btn {
+      padding: 0.45rem 1rem; border-radius: 6px;
+      font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; transition: filter 0.2s ease;
+      border: none;
+    }
+    .preview-btn-print { background: var(--blue); color: white; }
+    .preview-btn-print:hover { filter: brightness(1.1); }
+    .preview-btn-copy { background: var(--navy-light); color: var(--white-soft); border: 1px solid var(--navy-border); }
+    .preview-btn-copy:hover { color: var(--white); }
+    .preview-btn-share {
+      background: var(--navy-light);
+      color: var(--white-soft);
+      border: 1px solid var(--navy-border);
+    }
+    .preview-btn-share:hover {
+      color: var(--white);
+    }
+
+    /* QUOTE DOCUMENT */
+    .quote-doc {
+      padding: 2rem;
+      min-height: 400px;
+    }
+    .quote-empty {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 400px; text-align: center; gap: 1rem;
+      color: var(--white-muted);
+    }
+    .quote-empty-icon { font-size: 2.5rem; opacity: 0.3; }
+    .quote-empty-text { font-size: 0.88rem; line-height: 1.6; }
+
+    /* ACTUAL QUOTE */
+    .quote-output { display: none; }
+    .quote-output.visible { display: block; }
+
+    .quote-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2rem; gap: 1rem; }
+    .quote-business-name { font-size: 1.4rem; font-weight: 700; color: var(--white); letter-spacing: -0.02em; margin-bottom: 0.2rem; }
+    .quote-business-detail { font-size: 0.8rem; color: var(--white-muted); line-height: 1.5; }
+    .quote-meta { text-align: right; }
+    .quote-number { font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 500; color: var(--blue-light); margin-bottom: 0.3rem; }
+    .quote-dates { font-size: 0.78rem; color: var(--white-muted); line-height: 1.6; }
+
+    .quote-divider { height: 1px; background: var(--navy-border); margin: 1.5rem 0; }
+
+    .quote-client-section { margin-bottom: 1.5rem; }
+    .quote-client-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue-light); margin-bottom: 0.5rem; }
+    .quote-client-name { font-size: 1rem; font-weight: 600; color: var(--white); }
+    .quote-client-detail { font-size: 0.82rem; color: var(--white-muted); }
+    .quote-job-desc { font-size: 0.88rem; color: var(--white-soft); margin-top: 0.5rem; font-style: italic; }
+
+    .quote-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    .quote-table th {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--white-muted); padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--navy-border); text-align: left;
+    }
+    .quote-table th:last-child, .quote-table td:last-child { text-align: right; }
+    .quote-table td { padding: 0.75rem; font-size: 0.88rem; color: var(--white-soft); border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .quote-table tr:last-child td { border-bottom: none; }
+    .quote-table td:first-child { color: var(--white); }
+
+    .quote-totals { margin-left: auto; width: 240px; max-width: 100%; }
+    .quote-total-row { display: flex; justify-content: space-between; align-items: center; padding: 0.4rem 0; font-size: 0.85rem; color: var(--white-soft); }
+    .quote-total-row.vat { color: var(--white-muted); font-size: 0.8rem; }
+    .quote-total-row.grand { border-top: 1px solid var(--navy-border); margin-top: 0.5rem; padding-top: 0.75rem; font-weight: 700; font-size: 1rem; color: var(--white); }
+    .quote-total-row.grand span:last-child { color: var(--blue-light); font-family: 'JetBrains Mono', monospace; }
+
+    .quote-footer { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--navy-border); }
+    .quote-terms { font-size: 0.78rem; color: var(--white-muted); line-height: 1.6; margin-bottom: 1rem; }
+    .quote-powered {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-size: 0.7rem; color: var(--white-muted);
+    }
+    .quote-powered a { color: var(--blue-light); text-decoration: none; font-weight: 500; }
+    .quote-powered a:hover { color: var(--blue); }
+
+    /* HOW IT WORKS */
+    .how { max-width: 900px; margin: 0 auto; padding: 4rem 5%; text-align: center; }
+    .how-tag { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue-light); margin-bottom: 1rem; }
+    .how h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; letter-spacing: -0.02em; margin-bottom: 3rem; }
+    .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; text-align: left; }
+    .how-card { background: var(--navy-mid); border: 1px solid var(--navy-border); border-radius: 10px; padding: 1.8rem; }
+    .how-num { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--blue); margin-bottom: 1rem; }
+    .how-card h3 { font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 0.5rem; }
+    .how-card p { font-size: 0.85rem; color: var(--white-muted); line-height: 1.6; }
+
+    /* FOOTER */
+    footer { background: var(--navy-mid); border-top: 1px solid var(--navy-border); padding: 2rem 5%; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .footer-logo { font-size: 1rem; font-weight: 700; color: var(--white); letter-spacing: -0.02em; }
+    .footer-logo span { color: var(--blue); }
+    .footer-copy { font-size: 0.75rem; color: var(--white-muted); }
+    .footer-copy a { color: var(--blue-light); text-decoration: none; }
+
+    /* PRINT STYLES */
+    @media print {
+      nav, .hero, .form-panel, .preview-header, .how, footer, .quote-empty, .add-line-btn { display: none !important; }
+      body { background: white; color: black; }
+      .app-wrap { grid-template-columns: 1fr; padding: 0; }
+      .preview-panel { border: none; background: white; }
+      .quote-doc { padding: 1rem; }
+      .quote-business-name, .quote-client-name { color: black; }
+      .quote-business-detail, .quote-client-detail, .quote-job-desc, .quote-dates, .quote-terms, .quote-powered { color: #555; }
+      .quote-table th, .quote-table td { color: #333; border-color: #ddd; }
+      .quote-total-row { color: #333; }
+      .quote-total-row.grand { color: black; }
+      .quote-total-row.grand span:last-child { color: #1d4ed8; }
+      .quote-number { color: #1d4ed8; }
+      .quote-divider { background: #ddd; }
+      .quote-footer { border-color: #ddd; }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .app-wrap { grid-template-columns: 1fr; }
+      .form-panel { position: static; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero { padding: 3rem 5% 2rem; }
+      .how-grid { grid-template-columns: 1fr; }
+      .preview-actions { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-mark">Q</div>
+      <span class="nav-logo-text">Quotient<span>.</span></span>
+    </a>
+    <div class="nav-right">
+      <span class="nav-badge">Free Tool</span>
+      <a href="https://asiahaiderstudio.com" target="_blank" class="nav-link">By AH Studio</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag"><span class="hero-tag-dot"></span>Free — No Account Needed</div>
+    <h1>Professional quotes.<br><span>In under 2 minutes.</span></h1>
+    <p class="hero-sub">Stop sending quotes on WhatsApp. Create clean, professional, itemised quotes that win you more jobs — free, forever.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">2 min</div>
+        <div class="hero-stat-label">Average build time</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">100%</div>
+        <div class="hero-stat-label">Free, no sign up</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">PDF</div>
+        <div class="hero-stat-label">Save as PDF</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div class="app-wrap">
+
+    <!-- FORM -->
+    <div class="form-panel">
+      <div class="panel-header">
+        <div class="panel-header-dot"></div>
+        <span class="panel-header-title">Quote Builder</span>
+      </div>
+      <div class="panel-body">
+
+        <div class="form-section">
+          <div class="form-section-title">Your Business</div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Business Name</label>
+              <input type="text" id="biz-name" placeholder="Smith Plumbing Ltd" />
+            </div>
+            <div class="form-field">
+              <label>Your Name</label>
+              <input type="text" id="biz-contact" placeholder="John Smith" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Phone</label>
+              <input type="tel" id="biz-phone" placeholder="07700 000 000" />
+            </div>
+            <div class="form-field">
+              <label>Email</label>
+              <input type="email" id="biz-email" placeholder="john@smithplumbing.co.uk" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Address (optional)</label>
+            <input type="text" id="biz-address" placeholder="Newcastle upon Tyne, NE1" />
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Client Details</div>
+          <div class="form-row">
+            <div class="form-field">
+              <label>Client Name</label>
+              <input type="text" id="client-name" placeholder="Mr & Mrs Johnson" />
+            </div>
+            <div class="form-field">
+              <label>Client Phone</label>
+              <input type="tel" id="client-phone" placeholder="07800 000 000" />
+            </div>
+          </div>
+          <div class="form-field">
+            <label>Job Address</label>
+            <input type="text" id="client-address" placeholder="14 Jesmond Road, Newcastle, NE2 1PQ" />
+          </div>
+          <div class="form-field">
+            <label>Job Description</label>
+            <input type="text" id="job-desc" placeholder="e.g. Full bathroom replacement including new suite, tiling and plumbing" />
+          </div>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Line Items</div>
+          <div class="line-items" id="line-items">
+            <div class="line-item">
+              <input type="text" placeholder="Description (e.g. Labour — 2 days)" class="li-desc" />
+              <input type="number" placeholder="1" class="line-item-qty li-qty" value="1" min="1" />
+              <input type="number" placeholder="0.00" class="line-item-price li-price" step="0.01" min="0" />
+              <button class="line-item-remove" onclick="removeLine(this)" title="Remove">×</button>
+            </div>
+          </div>
+          <button class="add-line-btn" onclick="addLine()">+ Add Line Item</button>
+        </div>
+
+        <div class="form-section">
+          <div class="form-section-title">Settings</div>
+          <div class="form-field">
+            <label>Quote Number</label>
+            <input type="text" id="quote-num-input" placeholder="QT-1234" />
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">Include VAT</span>
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <input type="number" id="vat-rate" class="vat-rate-input" value="20" min="0" max="100" step="0.1" oninput="saveToStorage()" />
+              <span style="font-size:0.82rem;color:var(--white-muted);">%</span>
+              <div class="toggle" id="vat-toggle" onclick="toggleVAT()"></div>
+            </div>
+          </div>
+          <div class="toggle-row">
+            <span class="toggle-label">Include payment terms</span>
+            <div class="toggle active" id="terms-toggle" onclick="toggleTerms()"></div>
+          </div>
+          <div class="form-field" id="terms-text-wrap">
+            <label>Terms Text</label>
+            <textarea id="terms-text" rows="4" style="resize:vertical;line-height:1.5">This quote is valid for 30 days from the date above. A 50% deposit is required before work commences. Final payment is due on completion. All materials remain the property of the business until final payment is received.</textarea>
+          </div>
+        </div>
+
+        <button class="generate-btn" onclick="generateQuote()">Generate Quote</button>
+
+      </div>
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="preview-panel">
+      <div class="preview-header">
+        <div class="preview-header-left">
+          <div class="preview-header-dot"></div>
+          <span class="preview-header-title">Quote Preview</span>
+        </div>
+        <div class="preview-actions">
+          <button class="preview-btn preview-btn-copy" onclick="copyQuote()">📋 Copy Text</button>
+          <button class="preview-btn preview-btn-share" onclick="shareQuoteText()">💬 Share Text</button>
+          <button class="preview-btn preview-btn-print" onclick="savePDF()">🖨️ Save as PDF</button>
+        </div>
+      </div>
+      <div class="quote-doc">
+        <div class="quote-empty" id="quote-empty">
+          <div class="quote-empty-icon">📋</div>
+          <div class="quote-empty-text">Fill in your details and click<br><strong style="color:var(--white-soft)">Generate Quote</strong> to see the preview here.</div>
+        </div>
+        <div class="quote-output" id="quote-output">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how">
+    <div class="how-tag">How It Works</div>
+    <h2>Three steps to a professional quote.</h2>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">01 —</div>
+        <h3>Enter your details</h3>
+        <p>Add your business info, client details, and the job address. Takes about 60 seconds.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">02 —</div>
+        <h3>Add your line items</h3>
+        <p>List out materials and labour with quantities and prices. Add as many lines as you need.</p>
+      </div>
+      <div class="how-card">
+        <div class="how-num">03 —</div>
+        <h3>Save and send</h3>
+        <p>Hit Generate, then Save as PDF. A properly formatted A4 PDF downloads straight to your device.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">Quotient<span>.</span></div>
+      <p class="footer-copy">A free tool by <a href="https://asiahaiderstudio.com" target="_blank">AH Studio</a>. Need a website? <a href="https://asiahaiderstudio.com" target="_blank">Let's talk.</a></p>
+    </div>
+  </footer>
+
+  <script>
+    let vatEnabled = false;
+    let termsEnabled = true;
+
+    function genQuoteNum() {
+      return 'QT-' + Math.floor(1000 + Math.random() * 9000);
+    }
+
+    function saveToStorage() {
+      const lines = [];
+      document.querySelectorAll('.line-item').forEach(item => {
+        lines.push({
+          desc: item.querySelector('.li-desc').value,
+          qty: item.querySelector('.li-qty').value,
+          price: item.querySelector('.li-price').value
+        });
+      });
+      const data = {
+        bizName: document.getElementById('biz-name').value,
+        bizContact: document.getElementById('biz-contact').value,
+        bizPhone: document.getElementById('biz-phone').value,
+        bizEmail: document.getElementById('biz-email').value,
+        bizAddress: document.getElementById('biz-address').value,
+        clientName: document.getElementById('client-name').value,
+        clientPhone: document.getElementById('client-phone').value,
+        clientAddress: document.getElementById('client-address').value,
+        jobDesc: document.getElementById('job-desc').value,
+        quoteNum: document.getElementById('quote-num-input').value,
+        termsText: document.getElementById('terms-text').value,
+        vatRate: parseFloat(document.getElementById('vat-rate').value) || 20,
+        vatEnabled, termsEnabled, lines
+      };
+      localStorage.setItem('quotient_data', JSON.stringify(data));
+    }
+
+    function loadFromStorage() {
+      const raw = localStorage.getItem('quotient_data');
+      if (!raw) {
+        document.getElementById('quote-num-input').value = genQuoteNum();
+        return;
+      }
+      const d = JSON.parse(raw);
+      document.getElementById('biz-name').value = d.bizName || '';
+      document.getElementById('biz-contact').value = d.bizContact || '';
+      document.getElementById('biz-phone').value = d.bizPhone || '';
+      document.getElementById('biz-email').value = d.bizEmail || '';
+      document.getElementById('biz-address').value = d.bizAddress || '';
+      document.getElementById('client-name').value = d.clientName || '';
+      document.getElementById('client-phone').value = d.clientPhone || '';
+      document.getElementById('client-address').value = d.clientAddress || '';
+      document.getElementById('job-desc').value = d.jobDesc || '';
+      document.getElementById('quote-num-input').value = d.quoteNum || genQuoteNum();
+      if (d.termsText) document.getElementById('terms-text').value = d.termsText;
+      if (d.vatRate !== undefined) document.getElementById('vat-rate').value = d.vatRate;
+      vatEnabled = d.vatEnabled || false;
+      termsEnabled = d.termsEnabled !== undefined ? d.termsEnabled : true;
+      document.getElementById('vat-toggle').classList.toggle('active', vatEnabled);
+      document.getElementById('terms-toggle').classList.toggle('active', termsEnabled);
+      document.getElementById('terms-text-wrap').style.display = termsEnabled ? '' : 'none';
+      if (d.lines && d.lines.length > 0) {
+        const container = document.getElementById('line-items');
+        container.innerHTML = '';
+        d.lines.forEach(l => {
+          const div = document.createElement('div');
+          div.className = 'line-item';
+          div.innerHTML = `
+            <input type="text" placeholder="Description" class="li-desc" value="${(l.desc||'').replace(/"/g,'&quot;')}" />
+            <input type="number" placeholder="1" class="line-item-qty li-qty" value="${l.qty||1}" min="1" />
+            <input type="number" placeholder="0.00" class="line-item-price li-price" step="0.01" min="0" value="${l.price||''}" />
+            <button class="line-item-remove" onclick="removeLine(this)" title="Remove">×</button>
+          `;
+          container.appendChild(div);
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadFromStorage();
+      ['biz-name','biz-contact','biz-phone','biz-email','biz-address',
+       'client-name','client-phone','client-address','job-desc',
+       'quote-num-input','terms-text'].forEach(id => {
+        document.getElementById(id).addEventListener('input', saveToStorage);
+      });
+      document.getElementById('line-items').addEventListener('input', saveToStorage);
+    });
+
+    function addLine() {
+      const container = document.getElementById('line-items');
+      const div = document.createElement('div');
+      div.className = 'line-item';
+      div.innerHTML = `
+        <input type="text" placeholder="Description" class="li-desc" />
+        <input type="number" placeholder="1" class="line-item-qty li-qty" value="1" min="1" />
+        <input type="number" placeholder="0.00" class="line-item-price li-price" step="0.01" min="0" />
+        <button class="line-item-remove" onclick="removeLine(this)" title="Remove">×</button>
+      `;
+      container.appendChild(div);
+      saveToStorage();
+    }
+
+    function removeLine(btn) {
+      const items = document.querySelectorAll('.line-item');
+      if (items.length > 1) {
+        btn.closest('.line-item').remove();
+        saveToStorage();
+      }
+    }
+
+    function toggleVAT() {
+      vatEnabled = !vatEnabled;
+      document.getElementById('vat-toggle').classList.toggle('active', vatEnabled);
+      saveToStorage();
+    }
+
+    function toggleTerms() {
+      termsEnabled = !termsEnabled;
+      document.getElementById('terms-toggle').classList.toggle('active', termsEnabled);
+      document.getElementById('terms-text-wrap').style.display = termsEnabled ? '' : 'none';
+      saveToStorage();
+    }
+
+    function fmt(num) {
+      return '£' + parseFloat(num || 0).toFixed(2);
+    }
+
+    function getToday() {
+      return new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function getExpiry() {
+      const d = new Date();
+      d.setDate(d.getDate() + 30);
+      return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function generateQuote() {
+      const bizName = document.getElementById('biz-name').value.trim() || 'Your Business';
+      const bizContact = document.getElementById('biz-contact').value.trim();
+      const bizPhone = document.getElementById('biz-phone').value.trim();
+      const bizEmail = document.getElementById('biz-email').value.trim();
+      const bizAddress = document.getElementById('biz-address').value.trim();
+      const clientName = document.getElementById('client-name').value.trim() || 'Client';
+      const clientPhone = document.getElementById('client-phone').value.trim();
+      const clientAddress = document.getElementById('client-address').value.trim();
+      const jobDesc = document.getElementById('job-desc').value.trim();
+      const quoteNum = document.getElementById('quote-num-input').value.trim() || genQuoteNum();
+
+      const lineItems = [];
+      document.querySelectorAll('.line-item').forEach(item => {
+        const desc = item.querySelector('.li-desc').value.trim();
+        const qty = parseFloat(item.querySelector('.li-qty').value) || 1;
+        const price = parseFloat(item.querySelector('.li-price').value) || 0;
+        if (desc) lineItems.push({ desc, qty, price, total: qty * price });
+      });
+
+      const subtotal = lineItems.reduce((sum, i) => sum + i.total, 0);
+      const vatRate = parseFloat(document.getElementById('vat-rate').value) || 20;
+      const vat = vatEnabled ? subtotal * (vatRate / 100) : 0;
+      const grand = subtotal + vat;
+
+      let bizDetails = '';
+      if (bizContact) bizDetails += bizContact + '<br>';
+      if (bizPhone) bizDetails += bizPhone + '<br>';
+      if (bizEmail) bizDetails += bizEmail + '<br>';
+      if (bizAddress) bizDetails += bizAddress;
+
+      let tableRows = lineItems.length > 0 ? lineItems.map(i => `
+        <tr>
+          <td>${i.desc}</td>
+          <td style="text-align:center">${i.qty}</td>
+          <td style="text-align:right">${fmt(i.price)}</td>
+          <td style="text-align:right">${fmt(i.total)}</td>
+        </tr>
+      `).join('') : `<tr><td colspan="4" style="color:var(--white-muted);font-style:italic">No line items added</td></tr>`;
+
+      const vatRow = vatEnabled ? `<div class="quote-total-row vat"><span>VAT (${vatRate}%)</span><span>${fmt(vat)}</span></div>` : '';
+
+      const customTerms = document.getElementById('terms-text').value.trim();
+      const termsText = termsEnabled && customTerms ? `
+        <div class="quote-terms">
+          <strong style="color:var(--white-soft)">Terms &amp; Conditions:</strong> ${customTerms}
+        </div>
+      ` : '';
+
+      const html = `
+        <div class="quote-top">
+          <div>
+            <div class="quote-business-name">${bizName}</div>
+            <div class="quote-business-detail">${bizDetails}</div>
+          </div>
+          <div class="quote-meta">
+            <div class="quote-number">${quoteNum}</div>
+            <div class="quote-dates">
+              Date: ${getToday()}<br>
+              Valid until: ${getExpiry()}
+            </div>
+          </div>
+        </div>
+        <div class="quote-divider"></div>
+        <div class="quote-client-section">
+          <div class="quote-client-label">Prepared For</div>
+          <div class="quote-client-name">${clientName}</div>
+          ${clientPhone ? `<div class="quote-client-detail">${clientPhone}</div>` : ''}
+          ${clientAddress ? `<div class="quote-client-detail">${clientAddress}</div>` : ''}
+          ${jobDesc ? `<div class="quote-job-desc">${jobDesc}</div>` : ''}
+        </div>
+        <table class="quote-table">
+          <thead>
+            <tr>
+              <th>Description</th>
+              <th style="text-align:center">Qty</th>
+              <th style="text-align:right">Unit Price</th>
+              <th style="text-align:right">Total</th>
+            </tr>
+          </thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+        <div class="quote-totals">
+          <div class="quote-total-row"><span>Subtotal</span><span>${fmt(subtotal)}</span></div>
+          ${vatRow}
+          <div class="quote-total-row grand"><span>Total</span><span>${fmt(grand)}</span></div>
+        </div>
+        <div class="quote-footer">
+          ${termsText}
+          <div class="quote-powered">
+            Generated with <a href="https://quotient.asiahaiderstudio.com" target="_blank">Quotient by AH Studio</a>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('quote-empty').style.display = 'none';
+      const output = document.getElementById('quote-output');
+      output.innerHTML = html;
+      output.classList.add('visible');
+
+      if (window.innerWidth <= 768) {
+        document.querySelector('.preview-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function savePDF() {
+      const output = document.getElementById('quote-output');
+      if (!output.classList.contains('visible')) {
+        alert('Generate a quote first.');
+        return;
+      }
+
+      // Set the document title to the quote name for better filename in print dialog
+      const originalTitle = document.title;
+      const bizName = document.getElementById('biz-name').value.trim() || 'Quote';
+      const quoteNum = document.getElementById('quote-num-input').value.trim() || 'QT-1234';
+      document.title = `${bizName}_${quoteNum}`;
+
+      window.print();
+
+      // Restore original title after print dialog closes
+      setTimeout(() => {
+        document.title = originalTitle;
+      }, 100);
+    }
+
+    function shareQuoteText() {
+      const output = document.getElementById('quote-output');
+      if (!output.classList.contains('visible')) {
+        alert('Generate a quote first.');
+        return;
+      }
+
+      // Build plain text (same as copyQuote)
+      const bizName = document.getElementById('biz-name').value.trim() || 'Your Business';
+      const bizContact = document.getElementById('biz-contact').value.trim();
+      const bizPhone = document.getElementById('biz-phone').value.trim();
+      const bizEmail = document.getElementById('biz-email').value.trim();
+      const bizAddress = document.getElementById('biz-address').value.trim();
+      const clientName = document.getElementById('client-name').value.trim() || 'Client';
+      const clientPhone = document.getElementById('client-phone').value.trim();
+      const clientAddress = document.getElementById('client-address').value.trim();
+      const jobDesc = document.getElementById('job-desc').value.trim();
+      const qNum = document.getElementById('quote-num-input').value.trim() || 'QT-1234';
+      
+      const lineItems = [];
+      document.querySelectorAll('.line-item').forEach(item => {
+        const desc = item.querySelector('.li-desc').value.trim();
+        const qty = parseFloat(item.querySelector('.li-qty').value) || 1;
+        const price = parseFloat(item.querySelector('.li-price').value) || 0;
+        if (desc) lineItems.push({ desc, qty, price, total: qty * price });
+      });
+      
+      const subtotal = lineItems.reduce((sum, i) => sum + i.total, 0);
+      const vatRate = parseFloat(document.getElementById('vat-rate').value) || 20;
+      const vat = vatEnabled ? subtotal * (vatRate / 100) : 0;
+      const grand = subtotal + vat;
+      const sep = '─────────────────────────────────────────';
+      
+      const lines = [];
+      lines.push(bizName.toUpperCase());
+      if (bizContact) lines.push(bizContact);
+      if (bizPhone) lines.push(bizPhone);
+      if (bizEmail) lines.push(bizEmail);
+      if (bizAddress) lines.push(bizAddress);
+      lines.push('');
+      lines.push('Quote Ref: ' + qNum);
+      lines.push('Date: ' + getToday());
+      lines.push('Valid Until: ' + getExpiry());
+      lines.push(sep);
+      lines.push('PREPARED FOR');
+      lines.push(clientName);
+      if (clientPhone) lines.push(clientPhone);
+      if (clientAddress) lines.push(clientAddress);
+      if (jobDesc) lines.push(jobDesc);
+      lines.push(sep);
+      lines.push('DESCRIPTION                            QTY    UNIT      TOTAL');
+      lineItems.forEach(i => {
+        const desc = i.desc.padEnd(38).slice(0, 38);
+        const qty = String(i.qty).padStart(3);
+        const unit = fmt(i.price).padStart(8);
+        const total = fmt(i.total).padStart(10);
+        lines.push(desc + qty + '  ' + unit + '  ' + total);
+      });
+      lines.push(sep);
+      lines.push('Subtotal'.padEnd(50) + fmt(subtotal));
+      if (vatEnabled) lines.push(('VAT (' + vatRate + '%)').padEnd(50) + fmt(vat));
+      lines.push('TOTAL'.padEnd(50) + fmt(grand));
+      
+      if (termsEnabled) {
+        const customTerms = document.getElementById('terms-text').value.trim();
+        if (customTerms) {
+          lines.push(sep);
+          lines.push('TERMS & CONDITIONS');
+          lines.push(customTerms);
+        }
+      }
+      lines.push(sep);
+      lines.push('Generated with Quotient by AH Studio — quotient.asiahaiderstudio.com');
+      
+      const quoteText = lines.join('\n');
+      
+      if (navigator.share) {
+        navigator.share({
+          title: 'Quote from ' + bizName,
+          text: quoteText
+        }).catch(err => {
+          navigator.clipboard.writeText(quoteText);
+          alert('Share cancelled. Quote copied to clipboard instead.');
+        });
+      } else {
+        navigator.clipboard.writeText(quoteText);
+        alert('Quote copied to clipboard!');
+      }
+    }
+
+    function copyQuote() {
+      const output = document.getElementById('quote-output');
+      if (!output.classList.contains('visible')) {
+        alert('Generate a quote first.');
+        return;
+      }
+      const bizName = document.getElementById('biz-name').value.trim() || 'Your Business';
+      const bizContact = document.getElementById('biz-contact').value.trim();
+      const bizPhone = document.getElementById('biz-phone').value.trim();
+      const bizEmail = document.getElementById('biz-email').value.trim();
+      const bizAddress = document.getElementById('biz-address').value.trim();
+      const clientName = document.getElementById('client-name').value.trim() || 'Client';
+      const clientPhone = document.getElementById('client-phone').value.trim();
+      const clientAddress = document.getElementById('client-address').value.trim();
+      const jobDesc = document.getElementById('job-desc').value.trim();
+      const qNum = document.getElementById('quote-num-input').value.trim();
+      const lineItems = [];
+      document.querySelectorAll('.line-item').forEach(item => {
+        const desc = item.querySelector('.li-desc').value.trim();
+        const qty = parseFloat(item.querySelector('.li-qty').value) || 1;
+        const price = parseFloat(item.querySelector('.li-price').value) || 0;
+        if (desc) lineItems.push({ desc, qty, price, total: qty * price });
+      });
+      const subtotal = lineItems.reduce((sum, i) => sum + i.total, 0);
+      const vatRate = parseFloat(document.getElementById('vat-rate').value) || 20;
+      const vat = vatEnabled ? subtotal * (vatRate / 100) : 0;
+      const grand = subtotal + vat;
+      const sep = '─────────────────────────────────────────';
+      const lines = [];
+      lines.push(bizName.toUpperCase());
+      if (bizContact) lines.push(bizContact);
+      if (bizPhone) lines.push(bizPhone);
+      if (bizEmail) lines.push(bizEmail);
+      if (bizAddress) lines.push(bizAddress);
+      lines.push('');
+      lines.push('Quote Ref: ' + qNum);
+      lines.push('Date: ' + getToday());
+      lines.push('Valid Until: ' + getExpiry());
+      lines.push(sep);
+      lines.push('PREPARED FOR');
+      lines.push(clientName);
+      if (clientPhone) lines.push(clientPhone);
+      if (clientAddress) lines.push(clientAddress);
+      if (jobDesc) lines.push(jobDesc);
+      lines.push(sep);
+      lines.push('DESCRIPTION                            QTY    UNIT      TOTAL');
+      lineItems.forEach(i => {
+        const desc = i.desc.padEnd(38).slice(0, 38);
+        const qty = String(i.qty).padStart(3);
+        const unit = fmt(i.price).padStart(8);
+        const total = fmt(i.total).padStart(10);
+        lines.push(desc + qty + '  ' + unit + '  ' + total);
+      });
+      lines.push(sep);
+      lines.push('Subtotal'.padEnd(50) + fmt(subtotal));
+      if (vatEnabled) lines.push(('VAT (' + vatRate + '%)').padEnd(50) + fmt(vat));
+      lines.push('TOTAL'.padEnd(50) + fmt(grand));
+      if (termsEnabled) {
+        const customTerms = document.getElementById('terms-text').value.trim();
+        if (customTerms) {
+          lines.push(sep);
+          lines.push('TERMS & CONDITIONS');
+          lines.push(customTerms);
+        }
+      }
+      lines.push(sep);
+      lines.push('Generated with Quotient by AH Studio — quotient.asiahaiderstudio.com');
+      navigator.clipboard.writeText(lines.join('\n')).then(() => {
+        const btn = document.querySelector('.preview-btn-copy');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy Text', 2000);
+      });
+    }
+  </script>
+</body>
+</html>
